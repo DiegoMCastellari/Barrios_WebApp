@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Barrios</title>
+
+    <!-- LEAFLET -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""></script>
+    <script src="https://rawgithub.com/mylen/leaflet.TileLayer.WMTS/master/leaflet-tilelayer-wmts.js"></script>
+
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            position: absolute;
+            background-color: #418DC0;
+            }
+        .main{
+            position: absolute;
+            top: 0%;
+            width: 100vw;
+        }
+        .content{
+            position: absolute;
+            height: 100vh; 
+            width: 100vw;
+        }
+
+        .content #dropdown {
+            position: absolute;
+            left: 5%; 
+            top: 1%;
+            z-index: 5;
+            padding: 5px 10px;
+            font-size: 15px;
+        }
+        .content #map { 
+            position: absolute;
+            z-index: 1;
+            background-color: black;
+            height: 100%; 
+            width: 100%;
+        }
+
+        .content #info { 
+            position: absolute;
+            z-index: 1;
+            background-color: white;
+            left: 60%;
+            height: 100%; 
+            width: 40%;
+            display: none;
+        }
+        
+
+        .content #info #head {
+            background-color: white;
+            height: 5%; 
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .content #info #head #cerrar {
+            position: absolute;
+            background-color: white;
+            height: 5%;
+            width: 5%;
+            top: 0;
+            padding-left: 5px;
+            padding-top: 5px;
+            padding-bottom: 10px;
+            font-weight: bold;
+            font-size: 20px;
+            text-align: left;
+        }
+        .content #info #head #nombreBarrio {
+            background-color: white;
+            height: 100%; 
+            width: 100%;
+            top: 0;
+            left: 0;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            font-weight: bold;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        .content #info #sidecontent{
+            width: 100%;
+            height: 95%;
+            overflow:scroll;
+            padding-left: 0px;
+        }
+        
+        .content #info #sidecontent #tituloSeccion {
+            background-color: lightblue;
+            width: 100%;
+            padding: 5px 40px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 20px;
+            text-align: left;
+        }
+        .content #info #sidecontent #contenidoSeccion {
+            background-color: white;
+            width: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 5px;
+            font-size: 15px;
+            text-align: left;
+        }
+
+        /*Legend specific*/
+        .legend {
+        padding: 6px 8px;
+        font: 14px Arial, Helvetica, sans-serif;
+        background: white;
+        background: rgba(255, 255, 255, 0.8);
+        /*box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);*/
+        /*border-radius: 5px;*/
+        line-height: 24px;
+        color: #555;
+        }
+        .legend h4 {
+        text-align: center;
+        font-size: 16px;
+        margin: 2px 12px 8px;
+        color: #777;
+        }
+
+        .legend span {
+        position: relative;
+        bottom: 3px;
+        }
+
+        .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin: 0 8px 0 0;
+        opacity: 0.7;
+        }
+
+        .legend i.icon {
+        background-size: 18px;
+        background-color: rgba(255, 255, 255, 1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="content">
+            <select id = "dropdown" onchange = "selectOption()">
+                <option>Range Rover</option>
+            </select>
+            <div id="map"></div>
+            <div id="info">
+                <div id="head">
+                    <div id="cerrar" onclick="reset_info">Cerrar</div>
+                    <div id="nombreBarrio" > Villa Nombre</div>
+                </div>
+                <div id="sidecontent">
+                    <div id='tituloSeccion'> Seccion</div> 
+                    <div id='contenidoSeccion'>Descripcion</div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="./Datos_barrios.js"></script>
+<script src="./CABA_bp.js"></script>
+<script src="./CABA_renabap.js"></script>
+<script src="./sidebar.js"></script>
+<script src="./map.js"></script>
+</html>
