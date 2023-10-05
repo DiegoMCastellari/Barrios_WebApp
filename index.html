@@ -54,36 +54,41 @@
 
         .content #info { 
             position: absolute;
+            border-radius: 20px;
             z-index: 1;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.75);
             left: 60%;
-            height: 100%; 
-            width: 40%;
+            height: 98%; 
+            top: 2%;
+            right: 2%;
+            width: 38%;
             display: none;
         }
         
 
         .content #info #head {
-            background-color: white;
             height: 5%; 
             width: 100%;
             margin-bottom: 20px;
         }
         .content #info #head #cerrar {
             position: absolute;
-            background-color: white;
-            height: 5%;
-            width: 5%;
-            top: 0;
-            padding-left: 5px;
-            padding-top: 5px;
-            padding-bottom: 10px;
+            height: 25px;
+            width: 25px;
+            top: 5px;
+            left: calc(100% - 30px);
+            border-radius: 50%;
             font-weight: bold;
-            font-size: 20px;
-            text-align: left;
+            font-size: 15px;
+            text-align: center;
+            z-index: 10;
+        }
+        .content #info #head #cerrar:hover {
+            background-color: red;
+            border-color: white;
+            color: white;
         }
         .content #info #head #nombreBarrio {
-            background-color: white;
             height: 100%; 
             width: 100%;
             top: 0;
@@ -97,13 +102,15 @@
 
         .content #info #sidecontent{
             width: 100%;
-            height: 95%;
+            height: 90%;
             overflow:scroll;
+            overflow-x: hidden;
             padding-left: 0px;
         }
         
         .content #info #sidecontent #tituloSeccion {
-            background-color: lightblue;
+            background-color: black;
+            color: white;
             width: 100%;
             padding: 5px 40px;
             margin-bottom: 5px;
@@ -112,7 +119,6 @@
             text-align: left;
         }
         .content #info #sidecontent #contenidoSeccion {
-            background-color: white;
             width: 100%;
             padding-left: 20px;
             padding-right: 20px;
@@ -121,9 +127,22 @@
             text-align: left;
         }
 
+        .content #symbolButtomBar {
+            position: absolute;
+            bottom: 5px;
+            left: 6px;
+            z-index: 20;
+        }
+
+        .content #symbolButtomBar .symbolButtom {
+            padding: 5px 15px;
+            height: 30px;
+        }
+
         /*Legend specific*/
         .legend {
         padding: 6px 8px;
+        bottom: 35px;
         font: 14px Arial, Helvetica, sans-serif;
         background: white;
         background: rgba(255, 255, 255, 0.8);
@@ -168,7 +187,7 @@
             <div id="map"></div>
             <div id="info">
                 <div id="head">
-                    <div id="cerrar" onclick="reset_info">Cerrar</div>
+                    <button id="cerrar" onclick="reset_info">Cerrar</button>
                     <div id="nombreBarrio" > Villa Nombre</div>
                 </div>
                 <div id="sidecontent">
@@ -176,13 +195,21 @@
                     <div id='contenidoSeccion'>Descripcion</div> 
                 </div>
             </div>
+            <div id="symbolButtomBar">
+                <button class="symbolButtom" id="symbolTipoBarrio">Tipo Barrio</button>
+                <button class="symbolButtom" id="symbolComuna">Comuna</button>
+            </div>
         </div>
     </div>
+    
 </body>
 
 <script src="./Datos_barrios.js"></script>
 <script src="./CABA_bp.js"></script>
+<script src="./CABA_bp_zones.js"></script>
 <script src="./CABA_renabap.js"></script>
 <script src="./sidebar.js"></script>
 <script src="./map.js"></script>
+<script src="./dropdown.js"></script>
+<script src="./symbolgy.js"></script>
 </html>

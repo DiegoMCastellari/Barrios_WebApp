@@ -6,6 +6,7 @@ var poly_type = ['Villas',  'Asentamientos precarios', 'Nùcleos Habitacionales 
 var poly_colors = ["#F55C7A",  "#F0BA76", "#f5e36c",  "#C59DF5", "#30C4C7",  "#6CB0F7"]
 var id_poly_selected;
 var map_reduce = "60%"
+var symbologyType = 'TipoBarrio'
 
 var mymap = L.map('map').setView([-34.6165205,-58.4344456], 13); 
 
@@ -61,9 +62,9 @@ var baseMaps = {
     "<letras>ESRI - Image Map </letras>": ESRIImageMap,
     "<letras>ESRI - Topo Map </letras>": Esri_WorldTopoMap,
     "<letras>ESRI - Gray Canvas </letras>": Esri_WorldGrayCanvas,
-    "<letras>Stamen Toner Lite</letras>": Stamen_TonerLite,
+    /* "<letras>Stamen Toner Lite</letras>": Stamen_TonerLite,
     "<letras>Stamen Terrain<letras>": Stamen_Terrain,
-    "<letras>Stamen Toner</letras>": Stamen_Toner
+    "<letras>Stamen Toner</letras>": Stamen_Toner */
     };   
 
 
@@ -80,7 +81,24 @@ var CABA_br = L.geoJSON(CABA_br_data, {
     }
 }).bindPopup(function (layer) {
     return "<b>" + layer.feature.properties.NOM_MAP + " - Mz. "+ layer.feature.properties.MANZANA + "</b><br>" + layer.feature.properties.TIPO_ASENT + "<br><b>Obs.:</b> " + layer.feature.properties.OBSERV;
+});
+
+
+var CABA_br_zones = L.geoJSON(CABA_br_zone_data, {
+    style: function (feature) {
+        switch (feature.properties.TIPO_ASENT) {
+            case 'Villas': return {color: poly_colors[0], fillOpacity: 0.5, weight: 2};
+            case 'Asentamientos precarios':   return {color: poly_colors[1], fillOpacity: 0.5, weight: 2};
+            case 'Nùcleos Habitacionales Transitorios': return {color: poly_colors[2], fillOpacity: 0.5, weight: 2};
+            case 'Conjunto Habitacional':   return {color: poly_colors[3], fillOpacity: 0.5, weight: 2};
+            case 'Barrio Urbanizado': return {color: poly_colors[4], fillOpacity: 0.5, weight: 2};
+            case 'Barrios municipales':   return {color: poly_colors[5], fillOpacity: 0.5, weight: 2};     
+        }
+    }
+}).bindPopup(function (layer) {
+    return "<b>" + layer.feature.properties.NOM_MAP + "</b><br>" + layer.feature.properties.TIPO_ASENT;
 }).addTo(mymap);
+
 var CABA_renavap = L.geoJSON(CABA_renavap_data, {
     style: function (feature) {
         return {
@@ -116,81 +134,64 @@ legend.onAdd = function(mymap) {
 legend.addTo(mymap);
 
 
-
-
 /* Change style on click (selected) */
-function onMapClick(e) {
-
+function onBarrioClick(e) {
     if (id_poly_selected != e.sourceTarget.feature.properties.Id){
-        CABA_br.resetStyle()
+
+        if (symbologyType == 'TipoBarrio'){
+            CABA_br.resetStyle()
+            CABA_br_zones.resetStyle()
+        } else if (symbologyType == 'Comunas'){
+            symbolByComuna(CABA_br)
+            symbolByComuna(CABA_br_zones)
+        }
         id_poly_selected = e.sourceTarget.feature.properties.Id
         CABA_br.eachLayer(function (layer) {  
             if(layer.feature.properties.Id == id_poly_selected) {    
             layer.setStyle({color : 'yellow'}) 
             }         
         });
+        CABA_br_zones.eachLayer(function (layer) {  
+            if(layer.feature.properties.Id == id_poly_selected) {    
+            layer.setStyle({color : 'yellow'}) 
+            }         
+        });
         sidevar_data_update(e.sourceTarget.feature.properties.NOM_MAP)
         div_info.style.display = "block";
-        div_map.style.width = map_reduce;
+        /* div_map.style.width = map_reduce; */
     } else {
         id_poly_selected = -1
-        CABA_br.resetStyle()
+        if (symbologyType = 'TipoBarrio'){
+            CABA_br.resetStyle()
+            CABA_br_zones.resetStyle()
+        } else if (symbologyType == 'Comunas'){
+            symbolByComuna(CABA_br)
+            symbolByComuna(CABA_br_zones)
+        }
         div_info.style.display = "none";
-        div_map.style.width = "100%";
+        /* div_map.style.width = "100%"; */
     }
-    
 }
-CABA_br.on('click', onMapClick);
+CABA_br.on('click', onBarrioClick);
+CABA_br_zones.on('click', onBarrioClick);
 
-function reset_info() {
-    id_poly_selected = -1
-    CABA_br.resetStyle()
-    div_info.style.display = "none";
-    div_map.style.width = "100%";
-  }
 
-function selectOption() {
-    // get the index of the selected option
-    let selectedIndex = div_dropdown.selectedIndex;
-    // get a selected option and text value using the text property
-    let selectedValue = div_dropdown.options[selectedIndex].text;
 
-    sidevar_data_update(selectedValue)
-    div_info.style.display = "block";
-    div_map.style.width = map_reduce;
-    div_map.style.display = "block";
-    
-   let north = -200;
-   let east = -200;
-   let west = 0;
-   let sud = 0;
-    
-   CABA_br.resetStyle()
-    CABA_br.eachLayer(function (layer) {  
-        if(layer.feature.properties.NOM_MAP == selectedValue) {    
-        layer.setStyle({color : 'yellow'}) 
-        // Zoom to that layer.
-        console.log();
-        
-        let boundary = layer.getBounds()
-        let bound_north = boundary._northEast.lat
-        let bound_east = boundary._northEast.lng 
-        let bound_sud = boundary._southWest.lat
-        let bound_west = boundary._southWest.lng  
 
-        
-        if (bound_north > north ){north = bound_north}
-        if (bound_east > east ){east = bound_east}
-        if (bound_sud < sud ){sud = bound_sud}
-        if (bound_west < west ){west = bound_west}
-        }         
-    })
-    /* north = north+0.0002 */
-    east = east-((west-east)/2)
-    /* west = west-0.0002
-    sud = sud-0.0002 */
-    let corner1 = L.latLng(sud, west);
-    let corner2 = L.latLng(north, east);
-    let bounds = L.latLngBounds(corner1, corner2);
-    mymap.flyToBounds(bounds);
- }
+
+var activeLayer = 'zones'
+function onMapZoom(e) {
+    let zoomLevel = mymap.getZoom();
+
+    if (zoomLevel <= 15 && activeLayer != 'zones'){
+        activeLayer = 'zones'
+        CABA_br_zones.addTo(mymap)
+        mymap.removeLayer(CABA_br)
+    } else if (zoomLevel > 15 && activeLayer != 'barrios'){
+        activeLayer = 'barrios'
+        CABA_br.addTo(mymap)
+        mymap.removeLayer(CABA_br_zones)
+    }
+}
+mymap.on('zoom', onMapZoom);
+ 
