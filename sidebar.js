@@ -24,7 +24,7 @@ function sidevar_data_update(nombre_barrio){
 
 function reset_info() {
     id_poly_selected = -1
-    /* CABA_br.resetStyle() */
     div_info.style.display = "none";
+    resetSymbology()
     /* div_map.style.width = "100%"; */
 }

@@ -30,6 +30,16 @@ function symbolByComuna(featureLayer){
     });
 }
 
+function resetSymbology(){
+    if (symbologyType == 'TipoBarrio'){
+        CABA_br.resetStyle()
+        CABA_br_zones.resetStyle()
+    } else if (symbologyType == 'Comunas'){
+        symbolByComuna(CABA_br)
+        symbolByComuna(CABA_br_zones)
+    }
+}
+
 buttom_tipobarrio.onclick = function(){
     symbologyType = 'TipoBarrio'
     CABA_br.resetStyle()

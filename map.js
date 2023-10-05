@@ -138,13 +138,8 @@ legend.addTo(mymap);
 function onBarrioClick(e) {
     if (id_poly_selected != e.sourceTarget.feature.properties.Id){
 
-        if (symbologyType == 'TipoBarrio'){
-            CABA_br.resetStyle()
-            CABA_br_zones.resetStyle()
-        } else if (symbologyType == 'Comunas'){
-            symbolByComuna(CABA_br)
-            symbolByComuna(CABA_br_zones)
-        }
+        resetSymbology()
+        
         id_poly_selected = e.sourceTarget.feature.properties.Id
         CABA_br.eachLayer(function (layer) {  
             if(layer.feature.properties.Id == id_poly_selected) {    
@@ -161,13 +156,7 @@ function onBarrioClick(e) {
         /* div_map.style.width = map_reduce; */
     } else {
         id_poly_selected = -1
-        if (symbologyType = 'TipoBarrio'){
-            CABA_br.resetStyle()
-            CABA_br_zones.resetStyle()
-        } else if (symbologyType == 'Comunas'){
-            symbolByComuna(CABA_br)
-            symbolByComuna(CABA_br_zones)
-        }
+        resetSymbology()
         div_info.style.display = "none";
         /* div_map.style.width = "100%"; */
     }

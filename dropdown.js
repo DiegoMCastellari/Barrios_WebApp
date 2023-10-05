@@ -65,13 +65,7 @@ function selectOption() {
         corner2 = L.latLng(north, east);
         bounds = L.latLngBounds(corner1, corner2);
     } else {
-        if (symbologyType == 'TipoBarrio'){
-            CABA_br.resetStyle()
-            CABA_br_zones.resetStyle()
-        } else if (symbologyType == 'Comunas'){
-            symbolByComuna(CABA_br)
-            symbolByComuna(CABA_br_zones)
-        }
+        resetSymbology()
     }
     mymap.flyToBounds(bounds);
  }
